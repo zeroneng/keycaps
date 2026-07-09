@@ -1,6 +1,18 @@
 # Parametric Square Keycap
 
-This is a configured parametric MX keycap generated from a conf file.
+Parametric low-profile Cherry MX-compatible keycaps generated from simple `.conf` files. The current repo keeps two configured outputs: a shorter JWA-style cap and a taller centered MX-style cap. Each config produces both an STL for printing and a PNG render for quick GitHub preview.
+
+## Renders
+
+### JWA
+
+![JWA keycap render](jwa.png)
+
+### MX
+
+![MX keycap render](mx.png)
+
+## Parameters
 
 Variables:
 - post_height: 1.0
@@ -20,7 +32,9 @@ Variables:
 
 Files:
 - jwa.stl
+- jwa.png
+- mx_1u.stl
+- mx.png
 - README.md
 - jwa.conf
-
-Generated preview images are temporary send artifacts and should be deleted after delivery.
+- mx.conf

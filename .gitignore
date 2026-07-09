@@ -12,6 +12,12 @@ __pycache__/
 *.jpeg
 *.DS_Store
 ._*
+.AppleDouble
+.LSOverride
+Icon?
+.Spotlight-V100/
+.Trashes/
+.fseventsd/
 Thumbs.db
 
 output*/
