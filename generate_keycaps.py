@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Generate a reset parametric low-profile MX keycap.
-
-This version intentionally starts from simple named dimensions instead of the
-older ring-profile body. The cap body is a tapered square shell with a round
-Cherry MX-compatible post and cross socket.
-"""
+"""Generate a reset parametric low-profile MX keycap."""
 
 from __future__ import annotations
 
