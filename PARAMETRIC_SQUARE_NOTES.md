@@ -10,7 +10,7 @@ Variables:
 - base_corner_radius: 0.6
 - top_width/top_length/top_x/top_y: 14.4, 15.2, 0.0, -0.8
 - top_corner_radius: 3.0
-- top_concave_depth: 0.0
+- top_concave_depth: 0.5
 - top_concave_axis: x
 - sidewall_thickness: 1.25
 - top_thickness: 1.5

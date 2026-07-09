@@ -42,7 +42,7 @@ class KeycapParams:
     top_x: float = 0.0
     top_y: float = -0.8
     top_corner_radius: float = 3.0
-    top_concave_depth: float = 0.0
+    top_concave_depth: float = 0.5
     top_concave_axis: str = "x"
 
     # Shell controls.
