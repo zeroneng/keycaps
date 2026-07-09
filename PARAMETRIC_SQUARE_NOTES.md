@@ -22,5 +22,6 @@ Files:
 - rcon_parametric_square_mx_1u.stl
 - rcon_parametric_square_mx_socket_coupon.stl
 - PARAMETRIC_SQUARE_NOTES.md
+- jwa.conf
 
 Generated preview images are temporary send artifacts and should be deleted after delivery.

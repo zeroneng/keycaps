@@ -8,7 +8,9 @@ Cherry MX-compatible post and cross socket.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import argparse
+import configparser
+from dataclasses import dataclass, fields
 from math import cos, pi, sin
 from pathlib import Path
 
@@ -60,6 +62,37 @@ OUT_DIR = Path(__file__).resolve().parent
 CAP_NAME = "rcon_parametric_square_mx_1u"
 COUPON_NAME = "rcon_parametric_square_mx_socket_coupon"
 NOTES_NAME = "PARAMETRIC_SQUARE_NOTES.md"
+CONFIG_SECTION = "keycap"
+
+
+def load_params(config_path: Path | None) -> KeycapParams:
+    params = KeycapParams()
+    if config_path is None:
+        return params
+
+    parser = configparser.ConfigParser()
+    read_files = parser.read(config_path, encoding="utf-8")
+    if not read_files:
+        raise FileNotFoundError(f"could not read config file: {config_path}")
+    if CONFIG_SECTION not in parser:
+        raise ValueError(f"config file must contain a [{CONFIG_SECTION}] section")
+
+    section = parser[CONFIG_SECTION]
+    values: dict[str, float | int | str] = {}
+    for field in fields(KeycapParams):
+        if field.name not in section:
+            continue
+        current_value = getattr(params, field.name)
+        if isinstance(current_value, int):
+            values[field.name] = section.getint(field.name)
+        elif isinstance(current_value, float):
+            values[field.name] = section.getfloat(field.name)
+        elif isinstance(current_value, str):
+            values[field.name] = section.get(field.name).strip()
+        else:
+            raise TypeError(f"unsupported parameter type for {field.name}")
+
+    return KeycapParams(**{**params.__dict__, **values})
 
 
 def box(size: tuple[float, float, float], center: tuple[float, float, float]) -> trimesh.Trimesh:
@@ -410,7 +443,15 @@ def render_cad_sheet(mesh: trimesh.Trimesh, out_path: Path) -> None:
     plt.close(fig)
 
 
-def write_notes(path: Path, p: KeycapParams) -> None:
+def write_notes(path: Path, p: KeycapParams, config_path: Path | None = None) -> None:
+    files = [
+        f"- {CAP_NAME}.stl",
+        f"- {COUPON_NAME}.stl",
+        f"- {NOTES_NAME}",
+    ]
+    if config_path is not None:
+        files.append(f"- {config_path.name}")
+
     path.write_text(
         "\n".join(
             [
@@ -435,9 +476,7 @@ def write_notes(path: Path, p: KeycapParams) -> None:
                 f"- post_sections: {p.post_sections}",
                 "",
                 "Files:",
-                f"- {CAP_NAME}.stl",
-                f"- {COUPON_NAME}.stl",
-                f"- {NOTES_NAME}",
+                *files,
                 "",
                 "Generated preview images are temporary send artifacts and should be deleted after delivery.",
                 "",
@@ -447,17 +486,32 @@ def write_notes(path: Path, p: KeycapParams) -> None:
     )
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(description="Generate the parametric square MX keycap.")
+    parser.add_argument(
+        "config",
+        nargs="?",
+        help="Optional INI config file with a [keycap] section, for example jwa.conf.",
+    )
+    return parser.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
+    config_path = Path(args.config).resolve() if args.config else None
+    params = load_params(config_path)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    cap = make_cap(PARAMS)
-    coupon = make_coupon(PARAMS)
+    cap = make_cap(params)
+    coupon = make_coupon(params)
     cap.export(OUT_DIR / f"{CAP_NAME}.stl")
     coupon.export(OUT_DIR / f"{COUPON_NAME}.stl")
     render_preview(cap, OUT_DIR / "parametric_square_preview.png")
     render_views(cap, OUT_DIR)
     render_cad_sheet(cap, OUT_DIR / "parametric_square_cad_4view.png")
-    write_notes(OUT_DIR / NOTES_NAME, PARAMS)
+    write_notes(OUT_DIR / NOTES_NAME, params, config_path)
     print(OUT_DIR)
+    if config_path is not None:
+        print(f"config: {config_path}")
     print(f"cap watertight: {cap.is_watertight}")
     print(f"coupon watertight: {coupon.is_watertight}")
 
