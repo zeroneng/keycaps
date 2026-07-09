@@ -396,7 +396,6 @@ def render_preview(mesh: trimesh.Trimesh, out_path: Path) -> None:
     draw_mesh(ax1, mesh, "top/body", 28, -48)
     draw_mesh(ax2, mesh, "side taper", 14, -90)
     draw_mesh(ax3, mesh, "round MX post", -68, -45)
-    fig.suptitle("ZerOne Keycap", fontsize=12)
     fig.tight_layout()
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
@@ -406,7 +405,6 @@ def render_single_view(mesh: trimesh.Trimesh, title: str, elev: float, azim: flo
     fig = plt.figure(figsize=(5.2, 5.2), dpi=180)
     ax = fig.add_subplot(1, 1, 1, projection="3d")
     draw_mesh(ax, mesh, title, elev, azim)
-    fig.suptitle(f"ZerOne Keycap - {title}", fontsize=11)
     fig.tight_layout()
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
@@ -456,8 +454,7 @@ def render_cad_sheet(mesh: trimesh.Trimesh, out_path: Path) -> None:
     for index, (title, elev, azim) in enumerate(views, start=1):
         ax = fig.add_subplot(2, 2, index, projection="3d")
         draw_cad_mesh(ax, mesh, title, elev, azim)
-    fig.suptitle("ZERONE KEYCAP - ORTHOGRAPHIC 4 VIEW", fontsize=14)
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.tight_layout()
     fig.savefig(out_path, bbox_inches="tight")
     plt.close(fig)
 
