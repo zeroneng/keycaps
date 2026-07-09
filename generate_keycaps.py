@@ -60,6 +60,7 @@ class KeycapParams:
 @dataclass(frozen=True)
 class OutputFiles:
     cap_stl: str = "keycap.stl"
+    image_png: str = "keycap.png"
     notes: str = "README.md"
 
 
@@ -108,7 +109,10 @@ def load_output_files(config_path: Path | None) -> OutputFiles:
     if config_path is None:
         return OutputFiles()
 
-    output = OutputFiles(cap_stl=f"{config_path.stem}.stl")
+    output = OutputFiles(
+        cap_stl=f"{config_path.stem}.stl",
+        image_png=f"{config_path.stem}.png",
+    )
     parser = read_config(config_path)
     if OUTPUT_SECTION not in parser:
         return output
@@ -518,14 +522,12 @@ def main() -> None:
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     cap = make_cap(params)
     cap.export(OUT_DIR / output.cap_stl)
-    render_preview(cap, OUT_DIR / "parametric_square_preview.png")
-    render_views(cap, OUT_DIR)
-    render_cad_sheet(cap, OUT_DIR / "parametric_square_cad_4view.png")
-    write_notes(OUT_DIR / output.notes, params, output, config_path)
+    render_cad_sheet(cap, OUT_DIR / output.image_png)
     print(OUT_DIR)
     if config_path is not None:
         print(f"config: {config_path}")
     print(f"cap stl: {OUT_DIR / output.cap_stl}")
+    print(f"image png: {OUT_DIR / output.image_png}")
     print(f"cap watertight: {cap.is_watertight}")
 
 
