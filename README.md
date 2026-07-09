@@ -1,16 +1,16 @@
-# Parametric Square Keycap
+# ZerOne Keycap
 
-Parametric low-profile Cherry MX-compatible keycaps generated from simple `.conf` files. The current repo keeps two configured outputs: a shorter JWA-style cap and a taller centered MX-style cap. Each config produces both an STL for printing and a PNG render for quick GitHub preview.
+ZerOne Keycap is a small parametric generator for low-profile Cherry MX-compatible keycaps. Each `.conf` file defines one cap variant and produces both an STL for printing and a PNG render for quick GitHub preview.
 
 ## Renders
 
 ### JWA
 
-![JWA keycap render](jwa.png)
+![ZerOne JWA Keycap render](jwa.png)
 
 ### MX
 
-![MX keycap render](mx.png)
+![ZerOne MX Keycap render](mx.png)
 
 ## Parameters
 
